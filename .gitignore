@@ -1,0 +1,6 @@
+.DS_Store
+.aws-sam/
+__pycache__/
+*.pyc
+.env
+
