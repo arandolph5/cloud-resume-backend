@@ -1,0 +1,11 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "cloud-resume-backend"
+resolve_s3 = true
+s3_prefix = "cloud-resume-backend"
+region = "us-west-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "TableName=\"visitor-counter\""
+image_repositories = []

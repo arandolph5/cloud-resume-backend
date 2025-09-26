@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: CRC backend (visitor counter)
+
+Parameters:
+  TableName:
+    Type: String
+    Default: visitor-counter
+    Description: Existing DynamoDB table name
+
+Resources:
+  VisitorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: python3.9
+      Handler: lambda_function.lambda_handler   # file:function inside src/
+      CodeUri: src                               # your code is directly under src/
+      Timeout: 10
+      MemorySize: 128
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref TableName
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Events:
+        ApiInvoke:
+          Type: HttpApi
+          Properties:
+            Path: /count
+            Method: ANY
+
+Outputs:
+  ApiEndpoint:
+    Description: HTTP API endpoint
+    Value: !Sub 'https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com'
